@@ -1,0 +1,46 @@
+﻿# Ignore global IDE settings
+.vs/
+.idea/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Ignore Rider settings (if using JetBrains Rider)
+backend/.idea/
+
+# Ignore Visual Studio specific files
+backend/.vs/
+backend/backend.csproj.user
+
+# Ignore build outputs
+backend/bin/
+backend/obj/
+backend/publish/
+
+# Ignore compiled Razor files
+backend/Views/**/obj/
+
+# ASP.NET user secrets
+**/secrets.json
+
+# Environment files
+*.env
+appsettings.Development.json
+appsettings.Production.json
+
+# Node modules (in case of frontend later)
+node_modules/
+
+# Logs
+*.log
+
+# Ignore web build artifacts
+backend/wwwroot/
+
+# Optional: ignore Docker files
+.dockerignore
+Dockerfile
+
+# Ignore ReSharper files (if applicable)
+*.DotSettings.user

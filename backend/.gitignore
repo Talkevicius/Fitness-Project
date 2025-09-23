@@ -1,0 +1,59 @@
+﻿# .NET build outputs
+bin/
+obj/
+*.user
+*.rsuser
+*.suo
+*.userprefs
+
+# Visual Studio files
+.vs/
+.vscode/
+
+# Rider files
+.idea/
+
+# NuGet packages
+*.nupkg
+packages/
+
+# Publish folder
+publish/
+
+# ASP.NET Core environment variables
+appsettings.*.json
+
+# Logs
+*.log
+
+# React build and dependencies
+node_modules/
+build/
+
+# Optional: dotenv environment files
+.env
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# JetBrains Rider
+.idea/
+
+# npm debug logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+
+# JetBrains IDEs (Rider, IntelliJ)
+.idea/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userprefs
+
+../.idea
+../.vs

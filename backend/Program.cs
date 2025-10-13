@@ -37,10 +37,9 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-app.Run();*/
+app.Run();
 
-using backend.Data;
-using Microsoft.EntityFrameworkCore;
+*/
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -60,3 +59,4 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+

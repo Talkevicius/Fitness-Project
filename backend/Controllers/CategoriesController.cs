@@ -24,6 +24,7 @@ namespace backend.Controllers
             var total = await _context.Categories.CountAsync();
 
             var categories = await _context.Categories
+                //.Include(c => c.Exercises)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();

@@ -10,7 +10,7 @@ namespace backend.Models
 
         // Foreign key to Exercise
         [Required]
-        public int ExerciseId { get; set; }
+        public int? ExerciseId { get; set; }
         public Exercise? Exercise { get; set; }
 
         // Foreign key to User implement later

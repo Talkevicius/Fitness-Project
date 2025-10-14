@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using backend.Data;
+using System.Text.Json.Serialization;
 /*
 var builder = WebApplication.CreateBuilder(args);
 
@@ -52,7 +53,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddControllersWithViews()
     .AddJsonOptions(options =>
     {
-        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
+        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve; // rodo sarasus
+        //options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles; //nerodo sarasu
     });
 
 

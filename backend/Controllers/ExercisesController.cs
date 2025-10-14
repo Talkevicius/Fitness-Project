@@ -78,16 +78,16 @@ namespace backend.Controllers
             if (id != updatedExercise.Id)
                 return BadRequest();
 
-            var existing = await _context.Exercises.FindAsync(id);
-            if (existing == null)
+            var exercise = await _context.Exercises.FindAsync(id);
+            if  (exercise == null)
                 return NotFound();
 
-            existing.Name = updatedExercise.Name;
-            existing.Description = updatedExercise.Description;
-            existing.CategoryId = updatedExercise.CategoryId;
+            exercise.Name = updatedExercise.Name;
+            exercise.Description = updatedExercise.Description;
+            exercise.CategoryId = updatedExercise.CategoryId;
 
             await _context.SaveChangesAsync();
-            return NoContent();
+            return Ok( exercise); 
         }
 
         // PATCH: api/exercises/{id}
@@ -116,7 +116,7 @@ namespace backend.Controllers
             }
 
             await _context.SaveChangesAsync();
-            return NoContent();
+            return Ok(exercise); 
         }
 
         // DELETE: api/exercises/{id}

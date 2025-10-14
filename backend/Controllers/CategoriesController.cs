@@ -43,7 +43,7 @@ namespace backend.Controllers
         public async Task<ActionResult<Category>> GetCategory(int id)
         {
             var category = await _context.Categories
-                //.Include(c => c.Exercises) // include related exercises if needed
+                .Include(c => c.Exercises) // include related exercises if needed
                 .FirstOrDefaultAsync(c => c.Id == id);
 
             if (category == null)
@@ -83,8 +83,30 @@ namespace backend.Controllers
             category.MuscleGroup = updatedCategory.MuscleGroup;
 
             await _context.SaveChangesAsync();
-            return NoContent();
+            return Ok(category);
         }
+        
+        // PATCH: api/categories/{id}
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> PatchCategory(int id, [FromBody] JsonElement patchData)
+        {
+            var category = await _context.Categories.FindAsync(id);
+            if (category == null)
+                return NotFound();
+
+            if (patchData.TryGetProperty("muscleGroup", out JsonElement muscleGroupElement))
+            {
+                string newMuscleGroup = muscleGroupElement.GetString();
+                if (string.IsNullOrWhiteSpace(newMuscleGroup))
+                    return BadRequest("MuscleGroup cannot be empty.");
+
+                category.MuscleGroup = newMuscleGroup;
+            }
+
+            await _context.SaveChangesAsync();
+            return Ok(category); 
+        }
+
         
         // DELETE: api/categories/{id}
         [HttpDelete("{id}")]

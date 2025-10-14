@@ -39,6 +39,7 @@ namespace backend.Controllers
         {
             var comment = await _context.Comments
                 .Include(c => c.Exercise) // optional
+                .ThenInclude(e=>e.Category)
                 .FirstOrDefaultAsync(c => c.Id == id);
 
             if (comment == null)
@@ -76,7 +77,7 @@ namespace backend.Controllers
 
             await _context.SaveChangesAsync();
 
-            return NoContent();
+            return Ok(comment);
         }
 
         // PATCH: api/comments/{id}
@@ -103,7 +104,7 @@ namespace backend.Controllers
             }
 
             await _context.SaveChangesAsync();
-            return NoContent();
+            return Ok(comment);
         }
 
 

@@ -12,7 +12,7 @@ namespace backend.Models
 
         // Foreign key to Category
         [Required]
-        public int CategoryId { get; set; }
+        public int? CategoryId { get; set; }
         public Category? Category { get; set; }
 
         // Navigation property: one exercise can have many comments

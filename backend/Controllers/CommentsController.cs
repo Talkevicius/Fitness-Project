@@ -20,6 +20,7 @@ namespace backend.Controllers
 
         // GET: http://localhost:5214/api/comments?pageNumber=1&pageSize=10
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<Comment>>> GetComments([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
             if (pageNumber < 1) pageNumber = 1;
@@ -36,6 +37,7 @@ namespace backend.Controllers
 
         // GET: api/comments/5
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async Task<ActionResult<Comment>> GetComment(int id)
         {
             var comment = await _context.Comments
@@ -51,9 +53,28 @@ namespace backend.Controllers
 
         // POST: api/comments
         [HttpPost]
-        public async Task<ActionResult<Comment>> CreateComment(Comment comment)
+        [Authorize] // must be logged in
+        public async Task<ActionResult<Comment>> CreateComment(Comment incomingComment)
         {
-            // Optionally validate ExerciseId exists here
+            // Get user ID from JWT
+            var userIdClaim = User.FindFirst("id")?.Value;
+            if (userIdClaim == null)
+                return Unauthorized();
+
+            int currentUserId = int.Parse(userIdClaim);
+
+            // Validate exercise exists
+            var exerciseExists = await _context.Exercises.AnyAsync(e => e.Id == incomingComment.ExerciseId);
+            if (!exerciseExists)
+                return BadRequest(new { message = "Exercise does not exist." });
+
+            // Create comment with real user ID
+            var comment = new Comment
+            {
+                Content = incomingComment.Content,
+                ExerciseId = incomingComment.ExerciseId,
+                UserId = currentUserId
+            };
 
             _context.Comments.Add(comment);
             await _context.SaveChangesAsync();
@@ -61,34 +82,75 @@ namespace backend.Controllers
             return CreatedAtAction(nameof(GetComment), new { id = comment.Id }, comment);
         }
 
-        // PUT: api/comments/5 (Full update)
+
+        // PUT: api/comments/{id}
         [HttpPut("{id}")]
+        [Authorize] // must be logged in
         public async Task<IActionResult> UpdateComment(int id, Comment updatedComment)
         {
+            // Check ID mismatch
             if (id != updatedComment.Id)
                 return BadRequest("ID mismatch");
 
+            // Find comment
             var comment = await _context.Comments.FindAsync(id);
             if (comment == null)
                 return NotFound();
 
-            // Update all properties
+            // Get logged-in user info
+            var userIdClaim = User.FindFirst("id")?.Value;
+            var userRole = User.FindFirst("role")?.Value;
+
+            if (userIdClaim == null)
+                return Unauthorized();
+
+            int currentUserId = int.Parse(userIdClaim);
+
+            // Verify permissions:
+            // Owner OR admin may update
+            bool isOwner = comment.UserId == currentUserId;
+            bool isAdmin = userRole == "admin";
+
+            if (!isOwner && !isAdmin)
+                return Forbid(); // 403 Forbidden
+
+            // === Update ONLY allowed fields ===
             comment.Content = updatedComment.Content;
-            comment.ExerciseId = updatedComment.ExerciseId;
+
+            // ExerciseId should NOT be changed through update
+            // UserId also should NEVER change
 
             await _context.SaveChangesAsync();
 
             return Ok(comment);
         }
 
+
         // PATCH: api/comments/{id}
         [HttpPatch("{id}")]
+        [Authorize]
         public async Task<IActionResult> PatchComment(int id, [FromBody] JsonElement patchDoc)
         {
             var comment = await _context.Comments.FindAsync(id);
             if (comment == null)
                 return NotFound();
 
+            // Get user info from JWT
+            var userIdClaim = User.FindFirst("id")?.Value;
+            var userRole = User.FindFirst("role")?.Value;
+
+            if (userIdClaim == null)
+                return Unauthorized();
+
+            int currentUserId = int.Parse(userIdClaim);
+
+            bool isOwner = comment.UserId == currentUserId;
+            bool isAdmin = userRole == "admin";
+
+            if (!isOwner && !isAdmin)
+                return Forbid(); // 403 Forbidden
+
+            // Apply patch
             foreach (var prop in patchDoc.EnumerateObject())
             {
                 switch (prop.Name.ToLower())
@@ -97,10 +159,10 @@ namespace backend.Controllers
                         comment.Content = prop.Value.GetString() ?? comment.Content;
                         break;
 
+                    // User cannot change exerciseId or userId
                     case "exerciseid":
-                        if (prop.Value.TryGetInt32(out int exerciseId))
-                            comment.ExerciseId = exerciseId;
-                        break;
+                    case "userid":
+                        return BadRequest("You cannot modify ExerciseId or UserId.");
                 }
             }
 
@@ -109,23 +171,43 @@ namespace backend.Controllers
         }
 
 
-        // DELETE: api/comments/5
+
+        // DELETE: api/comments/{id}
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<IActionResult> DeleteComment(int id)
         {
             var comment = await _context.Comments.FindAsync(id);
             if (comment == null)
                 return NotFound();
 
+            // Extract user from JWT
+            var userIdClaim = User.FindFirst("id")?.Value;
+            var userRole = User.FindFirst("role")?.Value;
+
+            if (userIdClaim == null)
+                return Unauthorized();
+
+            int currentUserId = int.Parse(userIdClaim);
+
+            bool isOwner = comment.UserId == currentUserId;
+            bool isAdmin = userRole == "admin";
+
+            // Only admin or owner can delete
+            if (!isOwner && !isAdmin)
+                return Forbid(); // 403 Forbidden
+
             _context.Comments.Remove(comment);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
+
         
         // GET: api/categories/{categoryId}/exercises/{exerciseId}/comments[HttpGet("/api/categories/{categoryId}/exercises/{exerciseId}/comments")]
         // example: api/categories/1/exercises/1/comments
         [HttpGet("/api/categories/{categoryId}/exercises/{exerciseId}/comments")]
+        [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<Comment>>> GetCommentsForExercise(
             int categoryId,
             int exerciseId)

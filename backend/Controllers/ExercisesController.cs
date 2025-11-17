@@ -131,5 +131,20 @@ namespace backend.Controllers
             await _context.SaveChangesAsync();
             return NoContent();
         }
+        
+        // GET: api/categories/{categoryId}/exercises/{exerciseId}/comments
+        /*[HttpGet("/api/categories/{categoryId}/exercises/{exerciseId}/comments")]
+        public async Task<IActionResult> GetCommentsForExercise(int categoryId, int exerciseId)
+        {
+            var exercise = await _context.Exercises
+                .Include(e => e.Comments)
+                .FirstOrDefaultAsync(e => e.Id == exerciseId && e.CategoryId == categoryId);
+
+            if (exercise == null)
+                return NotFound("Exercise not found in this category.");
+
+            return Ok(exercise.Comments);
+        }*/
+
     }
 }

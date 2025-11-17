@@ -121,5 +121,30 @@ namespace backend.Controllers
 
             return NoContent();
         }
+        
+        // GET: api/categories/{categoryId}/exercises/{exerciseId}/comments[HttpGet("/api/categories/{categoryId}/exercises/{exerciseId}/comments")]
+        // example: api/categories/1/exercises/1/comments
+        [HttpGet("/api/categories/{categoryId}/exercises/{exerciseId}/comments")]
+        public async Task<ActionResult<IEnumerable<Comment>>> GetCommentsForExercise(
+            int categoryId,
+            int exerciseId)
+        {
+            // Optional: validate that the category and exercise exist
+            var exerciseExists = await _context.Exercises
+                .AnyAsync(e => e.Id == exerciseId && e.CategoryId == categoryId);
+
+            if (!exerciseExists)
+                return NotFound("Exercise not found in this category.");
+
+            var comments = await _context.Comments
+                .Where(c => c.ExerciseId == exerciseId)
+                .ToListAsync();
+
+            return Ok(comments);
+        }
+
+
+
+
     }
 }

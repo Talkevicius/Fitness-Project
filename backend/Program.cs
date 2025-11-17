@@ -55,6 +55,7 @@ builder.Services.AddControllersWithViews()
     {
         options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve; // rodo sarasus
         //options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles; //nerodo sarasu
+        options.JsonSerializerOptions.WriteIndented = true; // optional, makes JSON pretty
     });
 
 

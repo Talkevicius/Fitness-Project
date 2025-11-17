@@ -17,5 +17,9 @@ namespace backend.Models
 
         // Navigation property: one exercise can have many comments
         public List<Comment>? Comments { get; set; }
+        
+        // user authentification
+        public int UserId { get; set; }
+        public User User { get; set; }
     }
 }

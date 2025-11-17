@@ -54,6 +54,7 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddAuthorization(); // JWT
 
 var app = builder.Build();
 
@@ -64,6 +65,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseRouting();
 
 app.UseAuthentication(); // <-- JWT Authentication middleware
 app.UseAuthorization();
@@ -72,7 +74,7 @@ app.MapControllers();
 
 app.UseStaticFiles();
 
-app.UseRouting();
+
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");

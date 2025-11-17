@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using backend.Data;
 using backend.Models;
 using System.Text.Json;
+using Microsoft.AspNetCore.Authorization;
+
 
 namespace backend.Controllers
 {
@@ -19,6 +21,7 @@ namespace backend.Controllers
 
         // GET: api/categories?pageNumber=1&pageSize=10
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult> GetCategories([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
             var total = await _context.Categories.CountAsync();
@@ -40,6 +43,7 @@ namespace backend.Controllers
 
         // GET: api/categories/{id}
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async Task<ActionResult<Category>> GetCategory(int id)
         {
             var category = await _context.Categories
@@ -54,6 +58,7 @@ namespace backend.Controllers
 
         // POST: api/categories
         [HttpPost]
+        [Authorize(Roles = "admin")]
         public async Task<ActionResult<Category>> CreateCategory(Category category)
         {
             // Duplicate check on MuscleGroup
@@ -71,6 +76,7 @@ namespace backend.Controllers
 
         // PUT: api/categories/{id}
         [HttpPut("{id}")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> UpdateCategory(int id, Category updatedCategory)
         {
             if (id != updatedCategory.Id)
@@ -88,6 +94,7 @@ namespace backend.Controllers
         
         // PATCH: api/categories/{id}
         [HttpPatch("{id}")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> PatchCategory(int id, [FromBody] JsonElement patchData)
         {
             var category = await _context.Categories.FindAsync(id);
@@ -110,6 +117,7 @@ namespace backend.Controllers
         
         // DELETE: api/categories/{id}
         [HttpDelete("{id}")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> DeleteCategory(int id)
         {
             var category = await _context.Categories.FindAsync(id);

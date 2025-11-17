@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace backend.Models
 {
@@ -20,6 +21,8 @@ namespace backend.Models
         
         // user authentification
         public int UserId { get; set; }
-        public User User { get; set; }
+        
+        [JsonIgnore]
+        public User? User { get; set; }
     }
 }

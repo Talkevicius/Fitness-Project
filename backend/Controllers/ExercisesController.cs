@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using backend.Data;
 using backend.Models;
 using System.Text.Json;
+using Microsoft.AspNetCore.Authorization;
 
 namespace backend.Controllers
 {
@@ -19,6 +20,7 @@ namespace backend.Controllers
 
         // GET: api/exercises?pageNumber=1&pageSize=10
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult> GetExercises([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
             var total = await _context.Exercises.CountAsync();
@@ -40,11 +42,13 @@ namespace backend.Controllers
 
         // GET: api/exercises/{id}
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async Task<ActionResult<Exercise>> GetExercise(int id)
         {
             var exercise = await _context.Exercises
                 .Include(e => e.Category)
                 .Include(e => e.Comments)
+                //.Include(e => e.User)
                 .FirstOrDefaultAsync(e => e.Id == id);
 
             if (exercise == null)
@@ -55,12 +59,17 @@ namespace backend.Controllers
 
         // POST: api/exercises
         [HttpPost]
+        [Authorize] // allow both users and admins
         public async Task<ActionResult<Exercise>> CreateExercise(Exercise exercise)
         {
-            // duplicates
+            // Assign the creator's UserId from JWT
+            var userId = int.Parse(User.FindFirst("id")!.Value);
+            exercise.UserId = userId;
+
+            // Check duplicates
             var exists = await _context.Exercises
                 .AnyAsync(e => e.Name.ToLower() == exercise.Name.ToLower()
-                            && e.CategoryId == exercise.CategoryId);
+                               && e.CategoryId == exercise.CategoryId);
 
             if (exists)
                 return Conflict(new { message = "An exercise with the same name already exists in this category." });
@@ -71,33 +80,68 @@ namespace backend.Controllers
             return CreatedAtAction(nameof(GetExercise), new { id = exercise.Id }, exercise);
         }
 
+
+
         // PUT: api/exercises/{id}
         [HttpPut("{id}")]
+        [Authorize] // Any logged-in user
         public async Task<IActionResult> UpdateExercise(int id, Exercise updatedExercise)
         {
             if (id != updatedExercise.Id)
                 return BadRequest();
 
+            // Fetch the exercise along with the creator info
             var exercise = await _context.Exercises.FindAsync(id);
-            if  (exercise == null)
+            if (exercise == null)
                 return NotFound();
 
+            // Get the current logged-in user's ID and role from JWT claims
+            var userIdClaim = User.FindFirst("id")?.Value;
+            var roleClaim = User.FindFirst("role")?.Value;
+
+            if (userIdClaim == null)
+                return Unauthorized();
+
+            int currentUserId = int.Parse(userIdClaim);
+
+            // Only allow update if the user is the creator or an admin
+            if (exercise.UserId != currentUserId && roleClaim != "admin")
+                return Forbid(); // 403 Forbidden
+
+            // Update fields
             exercise.Name = updatedExercise.Name;
             exercise.Description = updatedExercise.Description;
             exercise.CategoryId = updatedExercise.CategoryId;
 
             await _context.SaveChangesAsync();
-            return Ok( exercise); 
+
+            return Ok(exercise);
         }
+
 
         // PATCH: api/exercises/{id}
         [HttpPatch("{id}")]
+        [Authorize] // Only logged-in users
         public async Task<IActionResult> PatchExercise(int id, [FromBody] JsonElement patchDoc)
         {
             var exercise = await _context.Exercises.FindAsync(id);
             if (exercise == null)
                 return NotFound();
 
+            // Get current user info from JWT
+            var userIdClaim = User.FindFirst("id")?.Value;
+            var roleClaim = User.FindFirst("role")?.Value;
+
+            if (userIdClaim == null)
+                return Unauthorized();
+
+            int currentUserId = int.Parse(userIdClaim);
+
+            // Only allow patch if the user is the creator or admin
+            if (exercise.UserId != currentUserId && roleClaim != "admin")
+                return Forbid(); // 403 Forbidden
+
+            // Apply changes
             foreach (var prop in patchDoc.EnumerateObject())
             {
                 switch (prop.Name.ToLower())
@@ -116,35 +160,39 @@ namespace backend.Controllers
             }
 
             await _context.SaveChangesAsync();
-            return Ok(exercise); 
+            return Ok(exercise);
         }
+
 
         // DELETE: api/exercises/{id}
         [HttpDelete("{id}")]
+        [Authorize] // Only logged-in users
         public async Task<IActionResult> DeleteExercise(int id)
         {
             var exercise = await _context.Exercises.FindAsync(id);
             if (exercise == null)
                 return NotFound();
 
+            // Get current user info from JWT
+            var userIdClaim = User.FindFirst("id")?.Value;
+            var roleClaim = User.FindFirst("role")?.Value;
+
+            if (userIdClaim == null)
+                return Unauthorized();
+
+            int currentUserId = int.Parse(userIdClaim);
+
+            // Only allow deletion if the user is the creator or admin
+            if (exercise.UserId != currentUserId && roleClaim != "admin")
+                return Forbid(); // 403 Forbidden
+
             _context.Exercises.Remove(exercise);
             await _context.SaveChangesAsync();
             return NoContent();
         }
+
         
-        // GET: api/categories/{categoryId}/exercises/{exerciseId}/comments
-        /*[HttpGet("/api/categories/{categoryId}/exercises/{exerciseId}/comments")]
-        public async Task<IActionResult> GetCommentsForExercise(int categoryId, int exerciseId)
-        {
-            var exercise = await _context.Exercises
-                .Include(e => e.Comments)
-                .FirstOrDefaultAsync(e => e.Id == exerciseId && e.CategoryId == categoryId);
-
-            if (exercise == null)
-                return NotFound("Exercise not found in this category.");
-
-            return Ok(exercise.Comments);
-        }*/
+        
 
     }
 }

@@ -1,8 +1,7 @@
-﻿// src/pages/ExercisePage/ExercisePage.tsx
-import React from "react";
+﻿import React from "react";
 import { useLoaderData } from "react-router-dom";
 import styles from "./ExercisePage.module.css";
-
+import ExerciseCard from "../../components/ExerciseCard/ExerciseCard.tsx"
 
 export interface Exercise {
     id: number;
@@ -14,30 +13,19 @@ export interface Exercise {
     } | null;
 }
 
-
-export interface PaginatedExercises {
-    totalItems: number;
-    pageNumber: number;
-    pageSize: number;
-    items: Exercise[];
-}
-
 const ExercisePage: React.FC = () => {
     const exercises = useLoaderData() as Exercise[];
-
     return (
-        <div className={styles.exercisePage}>
+        <div className={`${styles.exercisePage} ${styles.fadeDown}`}>
             <h1>Exercises</h1>
             <div className={styles.exerciseGrid}>
                 {exercises.map((exercise) => (
-                    <div key={exercise.id} className={styles.exerciseCard}>
-                        <h2>{exercise.name}</h2>
-                        <p>
-                            Muscle Group: {exercise.category?.muscleGroup ?? "Unknown"}
-                        </p>
-                        {exercise.description && <p>{exercise.description}</p>}
-                    </div>
-
+                    <ExerciseCard
+                        key={exercise.id}
+                        name={exercise.name}
+                        muscleGroup={exercise.category?.muscleGroup ?? "Unknown"}
+                        description={exercise.description}
+                    />
                 ))}
             </div>
         </div>

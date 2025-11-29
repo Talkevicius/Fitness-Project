@@ -1,6 +1,7 @@
-﻿import React from "react"; // If using React 17 or below, else optional in React 18+
+﻿import React from "react";
 import { useLoaderData } from "react-router-dom";
 import styles from "./CategoryPage.module.css";
+import CategoryCard from "../../components/CategoryCard/CategoryCard";
 
 interface Category {
     id: number;
@@ -11,13 +12,17 @@ const CategoryPage: React.FC = () => {
     const categories = useLoaderData() as Category[];
 
     return (
-        <div className={styles.categoryPage}>
+        <div className={`${styles.categoryPage} ${styles.fadeDown}`}>
             <h1>Categories</h1>
+
             <div className={styles.categoryGrid}>
                 {categories.map((category) => (
-                    <div key={category.id} className={styles.categoryCard}>
-                        <h2>{category.muscleGroup}</h2>
-                    </div>
+                    <CategoryCard
+                        key={category.id}
+                        id={category.id}
+                        muscleGroup={category.muscleGroup}
+                    />
+
                 ))}
             </div>
         </div>

@@ -1,0 +1,19 @@
+﻿.categoryCard {
+    display: flex;
+    flex-direction: column;
+    background-color: #f5f5f5;
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+    align-items: center;
+}
+
+.categoryCard:hover {
+    transform: translateY(-4px);
+}
+
+.categoryCard h2 {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+}

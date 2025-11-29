@@ -1,5 +1,5 @@
-﻿// src/routes/exercisesLoader.ts
-import axios from "axios";
+﻿import axios from "axios";
+const API_URL = import.meta.env.VITE_API_URL;
 
 export interface Exercise {
     id: number;
@@ -11,18 +11,18 @@ export interface Exercise {
     } | null;
 }
 
-
 export interface PaginatedExercises {
     totalItems: number;
     pageNumber: number;
     pageSize: number;
     items: Exercise[];
 }
+
 export default async function exercisesLoader() {
-    const res = await axios.get("http://localhost:5214/api/exercises", {
+    const res = await axios.get(`${API_URL}/api/exercises`, {
         params: {
             pageNumber: 1,
-            pageSize: 50, // larger than total exercises
+            pageSize: 50, // load all
         },
     });
     return res.data.items;

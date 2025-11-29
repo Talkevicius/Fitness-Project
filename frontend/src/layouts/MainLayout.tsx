@@ -20,6 +20,9 @@ const MainLayout = () => {
                             menuOpen ? styles.navLinksActive : ''
                         }`}>
                         <Link to="/" onClick={() => setMenuOpen(false)}>
+                            HomePage
+                        </Link>
+                        <Link to="/categories" onClick={() => setMenuOpen(false)}>
                             Categories
                         </Link>
                         <Link to="/exercises" onClick={() => setMenuOpen(false)}>

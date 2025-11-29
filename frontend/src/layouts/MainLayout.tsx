@@ -22,7 +22,7 @@ const MainLayout = () => {
                         <Link to="/" onClick={() => setMenuOpen(false)}>
                             Categories
                         </Link>
-                        <Link to="/" onClick={() => setMenuOpen(false)}>
+                        <Link to="/exercises" onClick={() => setMenuOpen(false)}>
                             Exercises
                         </Link>
                     </div>

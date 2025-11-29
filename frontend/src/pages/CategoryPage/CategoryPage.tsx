@@ -1,26 +1,25 @@
-﻿import React from "react";
-import { useLoaderData, Link } from "react-router-dom";
+﻿import React from "react"; // If using React 17 or below, else optional in React 18+
+import { useLoaderData } from "react-router-dom";
 import styles from "./CategoryPage.module.css";
 
 interface Category {
-    Id: number;
-    MuscleGroup: string;
+    id: number;
+    muscleGroup: string;
 }
 
-const CategoryPage = () => {
+const CategoryPage: React.FC = () => {
     const categories = useLoaderData() as Category[];
 
     return (
-        <div className={styles.grid}>
-            {categories.map((cat) => (
-                <Link
-                    key={cat.Id}
-                    to={`/categories/${cat.Id}/exercises`} // link to exercises page for this category
-                    className={styles.card}
-                >
-                    <h3>{cat.MuscleGroup}</h3>
-                </Link>
-            ))}
+        <div className={styles.categoryPage}>
+            <h1>Categories</h1>
+            <div className={styles.categoryGrid}>
+                {categories.map((category) => (
+                    <div key={category.id} className={styles.categoryCard}>
+                        <h2>{category.muscleGroup}</h2>
+                    </div>
+                ))}
+            </div>
         </div>
     );
 };

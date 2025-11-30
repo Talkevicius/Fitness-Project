@@ -1,10 +1,17 @@
-﻿/* src/components/ExerciseCard.module.css */
-.exerciseCard {
-    background-color: #f5f5f5;
-    border-radius: 8px;
+﻿.exerciseCard {
     padding: 1rem;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 150px;
+}
+
+.cardButtons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1rem;
 }
 
 .exerciseCard:hover {

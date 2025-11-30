@@ -2,42 +2,35 @@
 import { useNavigate } from "react-router-dom";
 import styles from "./CategoryCard.module.css";
 import ConfirmModal from "../ConfirmModal/ConfirmModal";
-import EditModal from "../EditModal/EditModal.tsx";
+import EditModal from "../EditModal/EditModal";
 import { Button } from "../Button/Button";
-import { getUser, isAdmin } from "../../context/auth";
+import { isAdmin } from "../../context/auth";
 
 interface CategoryCardProps {
     id: number;
     muscleGroup: string;
     onDelete: (id: number) => void;
-    onEdit: (id: number, newName: string) => void; // add this
+    onEdit: (id: number, newName: string) => void;
 }
 
-const CategoryCard: React.FC<CategoryCardProps> = ({ id, muscleGroup, onDelete,onEdit }) => {
+const CategoryCard: React.FC<CategoryCardProps> = ({ id, muscleGroup, onDelete, onEdit }) => {
     const navigate = useNavigate();
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isDeleteOpen, setIsDeleteOpen] = useState(false);
     const [isEditOpen, setIsEditOpen] = useState(false);
 
     const admin = isAdmin();
 
     const handleDelete = (e: React.MouseEvent) => {
-        e.stopPropagation(); // prevent navigating
-        setIsModalOpen(true);
+        e.stopPropagation();
+        setIsDeleteOpen(true);
     };
 
     const confirmDelete = () => {
         onDelete(id);
-        setIsModalOpen(false);
+        setIsDeleteOpen(false);
     };
 
-    const cancelDelete = () => {
-        setIsModalOpen(false);
-    };
-
-    const handleEdit = (e: React.MouseEvent) => {
-        e.stopPropagation();
-        navigate(`/categories/${id}/edit`);
-    };
+    const cancelDelete = () => setIsDeleteOpen(false);
 
     return (
         <>
@@ -47,13 +40,9 @@ const CategoryCard: React.FC<CategoryCardProps> = ({ id, muscleGroup, onDelete,o
             >
                 <h2>{muscleGroup}</h2>
 
-                {/* BUTTON ROW */}
                 {admin && (
                     <div className={styles.buttonRow}>
-                        <Button variant="secondary" onClick={(e) => {
-                            e.stopPropagation();
-                            setIsEditOpen(true);
-                        }}>
+                        <Button variant="secondary" onClick={(e) => { e.stopPropagation(); setIsEditOpen(true); }}>
                             Edit
                         </Button>
 
@@ -65,16 +54,18 @@ const CategoryCard: React.FC<CategoryCardProps> = ({ id, muscleGroup, onDelete,o
             </div>
 
             <ConfirmModal
-                isOpen={isModalOpen}
+                isOpen={isDeleteOpen}
                 onConfirm={confirmDelete}
                 onCancel={cancelDelete}
             />
+
             <EditModal
                 isOpen={isEditOpen}
-                initialValue={muscleGroup}
+                initialValues={{ muscleGroup }}
+                fields={[{ key: "muscleGroup", label: "Category Name" }]}
                 title="Edit Category"
-                onSave={(newValue) => {
-                    onEdit(id, newValue);   // <-- this calls the parent function
+                onSave={(updatedValues) => {
+                    onEdit(id, updatedValues.muscleGroup);
                     setIsEditOpen(false);
                 }}
                 onCancel={() => setIsEditOpen(false)}

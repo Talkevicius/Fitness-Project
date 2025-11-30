@@ -5,7 +5,10 @@ export interface Exercise {
     id: number;
     name: string;
     description?: string;
-    category?: { id: number; muscleGroup: string } | null;
+    category?: {
+        id: number;
+        muscleGroup: string;
+    } | null;
 }
 
 export default async function exercisesByCategoryLoader({ params }: any) {

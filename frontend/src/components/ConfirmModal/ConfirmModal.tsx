@@ -1,6 +1,7 @@
 ﻿import React from "react";
 import styles from "./ConfirmModal.module.css";
 import {Button} from "../Button/Button.tsx";
+import ReactDOM from "react-dom";
 
 interface ConfirmModalProps {
     isOpen: boolean;
@@ -11,7 +12,7 @@ interface ConfirmModalProps {
 const ConfirmModal: React.FC<ConfirmModalProps> = ({ isOpen, onConfirm, onCancel }) => {
     if (!isOpen) return null;
 
-    return (
+    return ReactDOM.createPortal(
         <div className={styles.overlay}>
             <div className={styles.modal}>
                 <p>Are you sure you want to delete this?</p>
@@ -25,7 +26,8 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({ isOpen, onConfirm, onCancel
                     </Button>
                 </div>
             </div>
-        </div>
+        </div>,
+        document.body
     );
 };
 

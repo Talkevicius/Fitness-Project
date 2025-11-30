@@ -61,6 +61,7 @@ namespace backend.Controllers
             return Ok(new
             {
                 Token = tokenHandler.WriteToken(token),
+                Id = user.Id,
                 Username = user.Username,
                 Role = user.Role
             });

@@ -3,7 +3,7 @@ import { useLoaderData } from "react-router-dom";
 import styles from "./ExercisePage.module.css";
 import ExerciseCard from "../../components/ExerciseCard/ExerciseCard.tsx"
 
-export interface Exercise {
+interface Exercise {
     id: number;
     name: string;
     description?: string;
@@ -11,7 +11,9 @@ export interface Exercise {
         id: number;
         muscleGroup: string;
     } | null;
+    ownerId?: number; // who created the exercise
 }
+
 
 const ExercisePage: React.FC = () => {
     const exercises = useLoaderData() as Exercise[];

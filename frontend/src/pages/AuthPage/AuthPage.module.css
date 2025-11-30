@@ -1,0 +1,104 @@
+﻿.authContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+   
+}
+
+.card {
+    width: 380px;
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    animation: fadeIn 0.5s ease;
+}
+
+.toggle {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 1.5rem;
+}
+
+.toggle button {
+    background: none;
+    border: none;
+    padding: 0.5rem;
+    font-size: 1.1rem;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: 0.2s;
+}
+
+.toggle .active {
+    font-weight: bold;
+    opacity: 1;
+    border-bottom: 2px solid blue;
+}
+
+.formWrapper h2 {
+    margin-bottom: 1rem;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+input {
+    padding: 0.7rem;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+button[type="submit"] {
+    margin-top: 0.5rem;
+    padding: 0.7rem;
+    background: royalblue;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.slideContainer {
+    overflow: hidden; /* Hide form sliding out of bounds */
+    position: relative;
+}
+
+.slide {
+    animation-duration: 0.4s;
+    animation-timing-function: ease;
+}
+
+.slideLeft {
+    animation-name: slideLeft;
+}
+
+.slideRight {
+    animation-name: slideRight;
+}
+
+@keyframes slideLeft {
+    from {
+        opacity: 0;
+        transform: translateX(40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideRight {
+    from {
+        opacity: 0;
+        transform: translateX(-40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}

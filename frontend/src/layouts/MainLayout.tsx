@@ -1,36 +1,61 @@
-﻿import React, { useState } from 'react';
-import styles from './MainLayout.module.css';
-import { Outlet, Link } from 'react-router-dom';
+﻿import React, { useState } from "react";
+import styles from "./MainLayout.module.css";
+import { Outlet, Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { Button } from "../components/Button/Button"; // import your button component
 
 const MainLayout = () => {
     const [menuOpen, setMenuOpen] = useState(false);
+    const navigate = useNavigate();
 
     const toggleMenu = () => setMenuOpen(!menuOpen);
 
+    const token = localStorage.getItem("token");
+
+    const handleLogout = () => {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        delete axios.defaults.headers.common["Authorization"];
+        navigate("/"); // redirect to homepage
+    };
+
     return (
         <div className={styles.container}>
-            {/* Header */}
             <header className={styles.header}>
                 <h1>Fitness Project</h1>
 
-                {/* Nav links */}
                 <nav>
                     <div
                         className={`${styles.navLinks} ${
-                            menuOpen ? styles.navLinksActive : ''
-                        }`}>
-                        <Link to="/" onClick={() => setMenuOpen(false)}>
+                            menuOpen ? styles.navLinksActive : ""
+                        }`}
+                    >
+                        <Button variant="tertiary" onClick={() => navigate("/")}>
                             HomePage
-                        </Link>
-                        <Link to="/categories" onClick={() => setMenuOpen(false)}>
+                        </Button>
+                        <Button variant="tertiary" onClick={() => navigate("/categories")}>
                             Categories
-                        </Link>
-                        <Link to="/exercises" onClick={() => setMenuOpen(false)}>
+                        </Button>
+                        <Button variant="tertiary" onClick={() => navigate("/exercises")}>
                             Exercises
-                        </Link>
+                        </Button>
+
+                        {!token ? (
+                            <>
+                                <Button variant="tertiary" onClick={() => navigate("/auth?mode=login")}>
+                                    Sign In
+                                </Button>
+                                <Button variant="tertiary" onClick={() => navigate("/auth?mode=register")}>
+                                    Register
+                                </Button>
+                            </>
+                        ) : (
+                            <Button variant="tertiary" onClick={handleLogout}>
+                                Logout
+                            </Button>
+                        )}
                     </div>
 
-                    {/* Hamburger */}
                     <div className={styles.hamburger} onClick={toggleMenu}>
                         <div></div>
                         <div></div>
@@ -39,15 +64,11 @@ const MainLayout = () => {
                 </nav>
             </header>
 
-            {/* Main content */}
             <main className={styles.main}>
                 <Outlet />
             </main>
 
-            {/* Footer */}
-            <footer className={styles.footer}>
-                &copy; 2025 Fitness Project
-            </footer>
+            <footer className={styles.footer}>&copy; 2025 Fitness Project</footer>
         </div>
     );
 };

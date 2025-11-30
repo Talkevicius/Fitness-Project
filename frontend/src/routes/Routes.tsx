@@ -12,6 +12,8 @@ import ExerciseDetailPage from "../pages/ExerciseDetailPage/ExerciseDetailPage.t
 import { exerciseDetailLoader } from "./exerciseDetailLoader";
 import exercisesByCategoryLoader from "./exercisesByCategoryLoader";
 
+import AuthPage from "../pages/AuthPage/AuthPage.tsx";
+
 
 export const router = createBrowserRouter([
     {
@@ -37,6 +39,11 @@ export const router = createBrowserRouter([
                 element: <ExercisePage />,
                 loader: exercisesByCategoryLoader,
             },
+            {
+                path: "/auth",
+                element: <AuthPage />
+            }
+
         ],
     },
 ]);

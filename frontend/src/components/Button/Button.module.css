@@ -1,0 +1,38 @@
+﻿.button {
+    
+    padding: 5px 5px;
+    width: 80%;
+}
+
+.primary {
+    background-color: red;
+    color: white;
+}
+
+.primary:hover {
+    cursor: pointer;
+    background-color: darkred;
+}
+
+.secondary {
+    background-color:green;
+    border: none;
+    color: white;
+}
+
+.secondary:hover {
+    cursor: pointer;
+    background-color: darkgreen;
+}
+
+
+.tertiary{
+    background-color: white;
+    color: black;
+    border: 1px solid black;
+}
+
+.secondary:hover {
+    cursor: pointer;
+    background-color: gray;
+}

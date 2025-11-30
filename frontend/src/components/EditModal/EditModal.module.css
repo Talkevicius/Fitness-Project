@@ -1,0 +1,77 @@
+﻿.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    width: 300px;
+    text-align: center;
+}
+
+.buttons {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 1.5rem;
+}
+
+button {
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    border: none;
+}
+
+.confirm {
+    background-color: red;
+    color: white;
+}
+
+.cancel {
+    background-color: #f0f0f0;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    width: 350px;
+    text-align: center;
+}
+
+.input {
+    width: 100%;
+    padding: 0.6rem;
+    margin: 1rem 0;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+.buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1rem;
+}

@@ -76,3 +76,29 @@
         display: flex;
     }
 }
+
+/* Auth buttons */
+.authBtn {
+    padding: 6px 12px;
+    background-color: #ffffff22;
+    border-radius: 6px;
+    color: white;
+    transition: 0.2s;
+}
+
+.authBtn:hover {
+    background-color: #ffffff33;
+}
+
+.registerBtn {
+    padding: 6px 12px;
+    background-color: #61dafb;
+    color: #000;
+    border-radius: 6px;
+    transition: 0.2s;
+}
+
+.registerBtn:hover {
+    background-color: #4db6d6;
+}
+

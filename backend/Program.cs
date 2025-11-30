@@ -26,7 +26,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.WithOrigins("http://localhost:5174") // React dev server
+        policy.WithOrigins("http://localhost:5173") // React dev server
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
@@ -60,6 +60,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddAuthorization();
 
 var app = builder.Build();
+app.UseCors("AllowFrontend");
 
 // Run migrations
 using (var scope = app.Services.CreateScope())

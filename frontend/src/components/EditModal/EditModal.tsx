@@ -3,74 +3,88 @@ import ReactDOM from "react-dom";
 import styles from "./EditModal.module.css";
 import { Button } from "../Button/Button";
 
-interface Field {
-    key: string;            // key in the object
-    label: string;          // label shown to user
-    type?: "text" | "textarea"; // optional field type
+export interface Field {
+    key: string;
+    label: string;
+    type?: "text" | "textarea" | "number" | "select";
+    options?: { value: string | number; label: string }[]; // for select
 }
 
 interface EditModalProps {
     isOpen: boolean;
-    initialValues: Record<string, any>; // can hold any keys/values
-    fields: Field[];                    // which fields to render
     title: string;
-    onSave: (updatedValues: Record<string, any>) => void;
+    fields: Field[];
+    initialValues: Record<string, any>; // dynamic values
+    onSave: (values: Record<string, any>) => void;
     onCancel: () => void;
 }
 
 const EditModal: React.FC<EditModalProps> = ({
-                                                 isOpen,
-                                                 initialValues,
-                                                 fields,
-                                                 title,
-                                                 onSave,
-                                                 onCancel
-                                             }) => {
-    const [values, setValues] = useState(initialValues);
+    isOpen,
+    title,
+    fields,
+    initialValues,
+    onSave,
+    onCancel
+}) => {
+    const [formValues, setFormValues] = useState<Record<string, any>>(initialValues);
 
-    // Reset values whenever modal opens
     useEffect(() => {
-        setValues(initialValues);
+        setFormValues(initialValues); // reset when modal opens
     }, [initialValues, isOpen]);
 
     if (!isOpen) return null;
-
-    const handleChange = (key: string, value: any) => {
-        setValues(prev => ({ ...prev, [key]: value }));
-    };
 
     return ReactDOM.createPortal(
         <div className={styles.overlay}>
             <div className={styles.modal}>
                 <h2>{title}</h2>
 
-                {fields.map(field => (
-                    <label key={field.key}>
-                        {field.label}:
-                        {field.type === "textarea" ? (
+                {fields.map((field) => {
+                    const value = formValues[field.key] ?? "";
+
+                    if (field.type === "textarea") {
+                        return (
                             <textarea
+                                key={field.key}
+                                value={value}
                                 className={styles.input}
-                                value={values[field.key] ?? ""}
-                                onChange={e => handleChange(field.key, e.target.value)}
+                                onChange={(e) => setFormValues({ ...formValues, [field.key]: e.target.value })}
+                                placeholder={field.label}
                             />
-                        ) : (
+                        );
+                    } else if (field.type === "select" && field.options) {
+                        return (
+                            <select
+                                key={field.key}
+                                value={value}
+                                className={styles.input}
+                                onChange={(e) => setFormValues({ ...formValues, [field.key]: Number(e.target.value) })}
+                            >
+                                {field.options.map(opt => (
+                                    <option key={opt.value} value={opt.value}>
+                                        {opt.label}
+                                    </option>
+                                ))}
+                            </select>
+                        );
+                    } else {
+                        return (
                             <input
+                                key={field.key}
+                                type={field.type || "text"}
                                 className={styles.input}
-                                type="text"
-                                value={values[field.key] ?? ""}
-                                onChange={e => handleChange(field.key, e.target.value)}
+                                value={value}
+                                onChange={(e) => setFormValues({ ...formValues, [field.key]: e.target.value })}
+                                placeholder={field.label}
                             />
-                        )}
-                    </label>
-                ))}
+                        );
+                    }
+                })}
 
                 <div className={styles.buttons}>
-                    <Button variant="secondary" onClick={() => onSave(values)}>
-                        Save
-                    </Button>
-                    <Button variant="tertiary" onClick={onCancel}>
-                        Cancel
-                    </Button>
+                    <Button variant="secondary" onClick={() => onSave(formValues)}>Save</Button>
+                    <Button variant="tertiary" onClick={onCancel}>Cancel</Button>
                 </div>
             </div>
         </div>,

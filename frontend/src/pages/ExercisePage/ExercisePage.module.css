@@ -4,6 +4,26 @@
     padding: 2rem;
 }
 
+.headingContainer{
+    display: flex;
+    gap: 20px;
+}
+.exerciseButton {
+    background-color: #3a913f; /* green similar to your cards */
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    display: inline-block;   /* don't let it stretch */
+    min-width: 120px;        /* optional to control size */
+    text-align: center;
+    transition: background-color 0.3s ease;
+}
+
+.exerciseButton:hover {
+    background-color: #2e6d31;
+}
+
 .exerciseGrid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));

@@ -3,6 +3,9 @@ import { useLoaderData } from "react-router-dom";
 import axios from "axios";
 import styles from "./CategoryPage.module.css";
 import CategoryCard from "../../components/CategoryCard/CategoryCard";
+import {isAdmin} from "../../context/auth.ts";
+import EditModal from "../../components/EditModal/EditModal.tsx";
+
 
 interface Category {
     id: number;
@@ -63,9 +66,40 @@ const CategoryPage: React.FC = () => {
         }
     };
 
+    const [isCreateModalOpen, setCreateModalOpen] = useState(false);
+
+    const handleCreateCategory = async (muscleGroup: string) => {
+        try {
+            const res = await axios.post(
+                `${API_URL}/api/categories`,
+                { muscleGroup },
+                { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
+            );
+            setCategories(prev => [...prev, res.data]);
+        } catch (err) {
+            console.error(err);
+            alert("Failed to create category");
+        }
+        setCreateModalOpen(false);
+    };
+
     return (
         <div className={`${styles.categoryPage} ${styles.fadeDown}`}>
             <h1>Categories</h1>
+            <div className={styles.headingContainer}>
+                {isAdmin() && (
+                    <>
+                        <h2>Click this to</h2>
+                        <button
+                            className={styles.addCategoryButton}
+                            onClick={() => setCreateModalOpen(true)}
+                        >
+                            Add new Category
+                        </button>
+                    </>
+                )}
+            </div>
+            
             <div className={styles.categoryGrid}>
                 {categories.map(category => (
                     <CategoryCard
@@ -77,6 +111,18 @@ const CategoryPage: React.FC = () => {
                     />
                 ))}
             </div>
+            {isCreateModalOpen && (
+                <EditModal
+                    isOpen={isCreateModalOpen}
+                    initialValues={{ muscleGroup: "" }}
+                    fields={[{ key: "muscleGroup", label: "Muscle Group" }]}
+                    title="Add New Category"
+                    onSave={(values) => {
+                        handleCreateCategory(values.muscleGroup);
+                    }}
+                    onCancel={() => setCreateModalOpen(false)}
+                />
+            )}
         </div>
     );
 };

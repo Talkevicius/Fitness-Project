@@ -26,6 +26,7 @@ const ExerciseCard: React.FC<ExerciseCardProps> = ({
     onDelete,
     onEdit
 }) => {
+
     const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
     const [isEditModalOpen, setEditModalOpen] = useState(false);
 
@@ -49,6 +50,10 @@ const ExerciseCard: React.FC<ExerciseCardProps> = ({
 
     const cancelDelete = () => setDeleteModalOpen(false);
 
+    console.log("User ID:", user?.id, typeof user?.id);
+    console.log("Author ID:", authorId, typeof authorId);
+    console.log("Is Admin:", isAdmin());
+    console.log("Can Edit or Delete:", canEditOrDelete);
     return (
         <div className={styles.exerciseCard}>
             <h2>{name}</h2>

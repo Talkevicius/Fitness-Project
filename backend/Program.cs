@@ -26,11 +26,16 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.WithOrigins("http://localhost:5173") // React dev server
-              .AllowAnyHeader()
-              .AllowAnyMethod();
+        policy.WithOrigins(
+                "https://talkevicius.github.io",
+                "https://talkevicius.github.io/Fitness-Project"
+            )
+            .AllowAnyHeader()
+            .AllowAnyMethod();
     });
 });
+
+
 
 // JWT authentication
 var jwtSettings = builder.Configuration.GetSection("Jwt");

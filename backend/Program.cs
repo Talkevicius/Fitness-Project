@@ -35,8 +35,6 @@ builder.Services.AddCors(options =>
     });
 });
 
-
-
 // JWT authentication
 var jwtSettings = builder.Configuration.GetSection("Jwt");
 var secretKey = jwtSettings.GetValue<string>("Key");

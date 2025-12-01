@@ -8,12 +8,12 @@ import categoriesLoader from "./categoriesLoader";
 import ExercisePage from "../pages/ExercisePage/ExercisePage";
 import exercisesLoader from "./exercisesLoader";
 
-import ExerciseDetailPage from "../pages/ExerciseDetailPage/ExerciseDetailPage.tsx";
-import { exerciseDetailLoader } from "./exerciseDetailLoader";
 import exercisesByCategoryLoader from "./exercisesByCategoryLoader";
-
 import AuthPage from "../pages/AuthPage/AuthPage.tsx";
 
+import ComentsPage from "../pages/ComentsPage/ComentsPage";
+
+import commentsLoader from "./comentsLoader.tsx"
 
 export const router = createBrowserRouter([
     {
@@ -33,6 +33,11 @@ export const router = createBrowserRouter([
                 path: "exercises",
                 element: <ExercisePage />,
                 loader: exercisesLoader,
+            },
+            {
+                path: "exercises/:exerciseId/comments",
+                element: <ComentsPage />,
+                // loader: commentsLoader,
             },
             {
                 path: "/categories/:categoryId",

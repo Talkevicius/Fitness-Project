@@ -4,6 +4,7 @@ import ConfirmModal from "../ConfirmModal/ConfirmModal";
 import { Button } from "../Button/Button";
 import { getUser, isAdmin } from "../../context/auth";
 import EditModal from "../EditModal/EditModal.tsx";
+import { useNavigate } from "react-router-dom";
 
 export interface ExerciseCardProps {
     id: number;
@@ -12,8 +13,10 @@ export interface ExerciseCardProps {
     categoryId: number;
     muscleGroup?: string;
     authorId: number;
+    authorName?: string;
     onDelete: (id: number) => void;
     onEdit: (exerciseData: { id: number; name: string; description?: string; categoryId: number }) => void;
+    hideActions?: boolean; // new prop
 }
 
 const ExerciseCard: React.FC<ExerciseCardProps> = ({
@@ -23,15 +26,18 @@ const ExerciseCard: React.FC<ExerciseCardProps> = ({
     categoryId,
     muscleGroup,
     authorId,
+    authorName,
     onDelete,
-    onEdit
+    onEdit,
+    hideActions = false // default false
 }) => {
 
+    const navigate = useNavigate();
     const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
     const [isEditModalOpen, setEditModalOpen] = useState(false);
 
     const user = getUser();
-    const canEditOrDelete = isAdmin() || user?.id === authorId;
+    const canEditOrDelete = !hideActions && (isAdmin() || user?.id === authorId);
 
     const handleDeleteClick = (e: React.MouseEvent) => {
         e.stopPropagation();
@@ -55,8 +61,13 @@ const ExerciseCard: React.FC<ExerciseCardProps> = ({
     console.log("Is Admin:", isAdmin());
     console.log("Can Edit or Delete:", canEditOrDelete);
     return (
-        <div className={styles.exerciseCard}>
+        <div className={styles.exerciseCard}
+             onClick={() => navigate(`/exercises/${id}/comments`)}>
             <h2>{name}</h2>
+            <p className={styles.authorText}>
+                This post was created by: <strong>{authorName ?? "Unknown"}</strong>
+            </p>
+
             <p>Muscle Group: {muscleGroup ?? "Unknown"}</p>
             <p>{description}</p>
 

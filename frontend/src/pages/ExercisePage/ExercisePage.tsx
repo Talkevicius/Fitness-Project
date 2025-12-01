@@ -3,7 +3,7 @@ import { useLoaderData } from "react-router-dom";
 import styles from "./ExercisePage.module.css";
 import ExerciseCard from "../../components/ExerciseCard/ExerciseCard.tsx";
 import axios from "axios";
-import {getUser, isAdmin} from "../../context/auth.ts";
+import {getUser, getUsernameById, isAdmin} from "../../context/auth.ts";
 import EditModal from "../../components/EditModal/EditModal.tsx";
 
 interface Category {
@@ -19,6 +19,7 @@ interface Exercise {
         muscleGroup: string;
     } | null;
     userId?: number;
+    authorName?: string;
 }
 
 const API_URL = import.meta.env.VITE_API_URL;
@@ -127,6 +128,27 @@ const ExercisePage: React.FC = () => {
         setCreateModalOpen(false);
     };
 
+
+    
+    useEffect(() => {
+        const loadAuthorNames = async () => {
+            const updatedExercises = await Promise.all(
+                exercises.map(async (ex) => {
+                    const username = await getUsernameById(ex.userId ?? 0);
+                    console.log("username is" + username);
+                    return {
+                        ...ex,
+                        authorName: username
+                    };
+                })
+            );
+            setExercises(updatedExercises);
+        };
+
+        loadAuthorNames();
+    }, []);
+    
+    
     return (
         <div className={`${styles.exercisePage} ${styles.fadeDown}`}>
             <h1>Exercises</h1>
@@ -157,6 +179,7 @@ const ExercisePage: React.FC = () => {
                         categoryId={exercise.category?.id ?? 0}
                         muscleGroup={exercise.category?.muscleGroup}
                         authorId={exercise.userId ?? 0}
+                        authorName={exercise.authorName ?? "Unknown"}
                         onDelete={deleteExercise}
                         onEdit={editExercise}
                     />

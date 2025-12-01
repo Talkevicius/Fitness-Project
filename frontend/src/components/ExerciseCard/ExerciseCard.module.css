@@ -27,3 +27,10 @@
     font-size: 0.9rem;
     color: #555;
 }
+
+.authorText {
+    font-size: 0.9rem;
+    color: #666;                 /* subtle gray */
+    margin: 4px 0 10px 0;        /* spacing under the name */
+    font-style: italic;          /* makes it look softer */
+}

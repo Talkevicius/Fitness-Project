@@ -1,6 +1,6 @@
 ﻿import axios from "axios";
 
-export async function exerciseDetailLoader({ params }: { params: { exerciseId: string } }) {
+export default async function exerciseDetailLoader({ params }: { params: { exerciseId: string } }) {
     const { exerciseId } = params;
 
     try {

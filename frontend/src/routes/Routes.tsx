@@ -1,4 +1,4 @@
-﻿import { createBrowserRouter, createRoutesFromElements, Route } from "react-router-dom";
+﻿import { createBrowserRouter} from "react-router-dom";
 import MainLayout from "../layouts/MainLayout";
 import HomePage from "../pages/HomePage/HomePage.tsx"
 import NoMatchPage from "../pages/NoMatchPage/NoMatchPage";
@@ -13,7 +13,7 @@ import AuthPage from "../pages/AuthPage/AuthPage.tsx";
 
 import ComentsPage from "../pages/ComentsPage/ComentsPage";
 
-import commentsLoader from "./comentsLoader.tsx"
+//import commentsLoader from "./comentsLoader.tsx"
 
 export const router = createBrowserRouter([
     {
@@ -46,7 +46,13 @@ export const router = createBrowserRouter([
             },
             {
                 path: "/auth",
-                element: <AuthPage />
+                element: <AuthPage/>
+            },
+            {
+                path: "*",
+                element: (
+                    <NoMatchPage />
+                )
             }
 
         ],

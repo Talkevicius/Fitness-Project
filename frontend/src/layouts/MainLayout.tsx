@@ -1,6 +1,6 @@
-﻿import React, { useState } from "react";
+﻿import { useState } from "react";
 import styles from "./MainLayout.module.css";
-import { Outlet, Link, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Button } from "../components/Button/Button"; // import your button component
 

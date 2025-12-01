@@ -1,9 +1,10 @@
-﻿import { ReactNode } from 'react';
+﻿import type { ReactNode } from 'react';
+
 import styles from './Button.module.css';
 
 interface ButtonProps {
     children: ReactNode;
-    onClick;
+    onClick?: (e?: any) => void;
     variant?: 'primary' | 'secondary' | 'tertiary' | 'default';
 }
 

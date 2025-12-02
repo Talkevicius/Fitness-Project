@@ -32,7 +32,7 @@ const CommentCard: React.FC<CommentCardProps> = ({ id, username, content, userId
                 </div>
                 <div className={styles.contentContainer}>
                     <h5>{username}</h5>
-                    <p>{content}</p>
+                    <p className={styles.commentContent}>{content}</p>
                 </div>
                 {canEditOrDelete && (
                     <div className={styles.actions}>

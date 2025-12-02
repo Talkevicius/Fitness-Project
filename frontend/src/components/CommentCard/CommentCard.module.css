@@ -47,3 +47,15 @@
 .actions button:hover {
     color: darkblue;
 }
+
+/* CommentCard.module.css */
+
+.commentContent {
+    /* Replace 'Oswald' with the actual font family name you chose from Google Fonts */
+    font-family: 'Oswald', sans-serif;
+
+    /* You can also adjust size, weight, etc. here */
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+}

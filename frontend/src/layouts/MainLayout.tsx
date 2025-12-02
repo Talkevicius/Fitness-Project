@@ -3,6 +3,7 @@ import styles from "./MainLayout.module.css";
 import { Outlet, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Button } from "../components/Button/Button"; // import your button component
+import svg from "../assets/react.svg";
 
 const MainLayout = () => {
     const [menuOpen, setMenuOpen] = useState(false);
@@ -22,7 +23,7 @@ const MainLayout = () => {
     return (
         <div className={styles.container}>
             <header className={styles.header}>
-                <h1>Fitness Project</h1>
+                <h1>Fitness<span><img src={svg}></img></span> Project</h1>
 
                 <nav>
                     <div

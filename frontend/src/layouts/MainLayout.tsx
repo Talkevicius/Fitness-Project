@@ -23,7 +23,7 @@ const MainLayout = () => {
     return (
         <div className={styles.container}>
             <header className={styles.header}>
-                <h1>Fitness<span><img src={svg}></img></span> Project</h1>
+                <h1>Fitness <span><img src={svg}></img></span> Project</h1>
 
                 <nav>
                     <div

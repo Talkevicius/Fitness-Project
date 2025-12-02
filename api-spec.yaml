@@ -1,0 +1,529 @@
+﻿openapi: 3.0.4
+info:
+  title: Fitness Project API
+  version: "1.0"
+  description: >
+    REST API for the Fitness Project application. 
+    Provides CRUD operations for categories, exercises, comments, and user authentication.
+
+servers:
+  - url: http://localhost:5214
+
+paths:
+
+  ############################################################
+  # CATEGORIES
+  ############################################################
+
+  /api/categories:
+    get:
+      summary: Get all categories (paginated)
+      tags: [Categories]
+      parameters:
+        - in: query
+          name: pageNumber
+          schema: { type: integer, default: 1 }
+        - in: query
+          name: pageSize
+          schema: { type: integer, default: 10 }
+      responses:
+        200:
+          description: List of categories
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Category"
+
+    post:
+      summary: Create a new category
+      tags: [Categories]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CategoryCreate"
+      responses:
+        201:
+          description: Created category
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Category"
+          examples:
+            example:
+              value:
+                id: 8
+                muscleGroup: "Legs"
+                exercises: null
+
+  /api/categories/{id}:
+    get:
+      summary: Get category by ID
+      tags: [Categories]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        200:
+          description: Category found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Category"
+        404:
+          description: Category not found
+
+    put:
+      summary: Update category (full)
+      tags: [Categories]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CategoryCreate"
+      responses:
+        200:
+          description: Updated category
+
+    patch:
+      summary: Update category (partial)
+      tags: [Categories]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        200:
+          description: Category updated partially
+
+    delete:
+      summary: Delete category
+      tags: [Categories]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        204:
+          description: Category deleted successfully
+
+
+  ############################################################
+  # EXERCISES
+  ############################################################
+
+  /api/exercises:
+    get:
+      summary: Get all exercises (paginated)
+      tags: [Exercises]
+      parameters:
+        - in: query
+          name: pageNumber
+          schema: { type: integer, default: 1 }
+        - in: query
+          name: pageSize
+          schema: { type: integer, default: 10 }
+      responses:
+        200:
+          description: List of exercises
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Exercise"
+
+    post:
+      summary: Create a new exercise
+      tags: [Exercises]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ExerciseCreate"
+      responses:
+        201:
+          description: Exercise created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Exercise"
+
+  /api/exercises/{id}:
+    get:
+      summary: Get exercise by ID
+      tags: [Exercises]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        200:
+          description: Exercise found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Exercise"
+        404:
+          description: Exercise not found
+
+    put:
+      summary: Update exercise (full)
+      tags: [Exercises]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ExerciseCreate"
+      responses:
+        200:
+          description: Exercise updated
+
+    patch:
+      summary: Update exercise (partial)
+      tags: [Exercises]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        200:
+          description: Exercise updated partially
+
+    delete:
+      summary: Delete exercise
+      tags: [Exercises]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        204:
+          description: Exercise deleted
+
+
+  ############################################################
+  # COMMENTS
+  ############################################################
+
+  /api/comments:
+    get:
+      summary: Get all comments (paginated)
+      tags: [Comments]
+      parameters:
+        - in: query
+          name: pageNumber
+          schema: { type: integer, default: 1 }
+        - in: query
+          name: pageSize
+          schema: { type: integer, default: 10 }
+      responses:
+        200:
+          description: List of comments
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Comment"
+
+    post:
+      summary: Create a new comment
+      tags: [Comments]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CommentCreate"
+      responses:
+        201:
+          description: Comment created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Comment"
+
+  /api/comments/{id}:
+    get:
+      summary: Get comment by ID
+      tags: [Comments]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        200:
+          description: Comment found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Comment"
+        404:
+          description: Comment not found
+
+    put:
+      summary: Update comment (full)
+      tags: [Comments]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CommentCreate"
+      responses:
+        200:
+          description: Comment updated
+
+    patch:
+      summary: Update comment (partial)
+      tags: [Comments]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        200:
+          description: Comment updated partially
+
+    delete:
+      summary: Delete comment
+      tags: [Comments]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        204:
+          description: Comment deleted
+
+
+  ############################################################
+  # USERS
+  ############################################################
+
+  /api/users/login:
+    post:
+      summary: Login user
+      tags: [Users]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
+      responses:
+        200:
+          description: User authenticated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoginResponse"
+        400:
+          description: Invalid credentials
+
+  /api/users/register:
+    post:
+      summary: Register new user
+      tags: [Users]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterRequest"
+      responses:
+        201:
+          description: User created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+
+  /api/users/{userId}/username:
+    get:
+      summary: Get username by user ID
+      tags: [Users]
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        200:
+          description: Username found
+          content:
+            application/json:
+              schema:
+                type: string
+        404:
+          description: User not found
+
+
+############################################################
+# SCHEMAS
+############################################################
+
+components:
+  schemas:
+
+    Category:
+      type: object
+      required: [muscleGroup]
+      properties:
+        id:
+          type: integer
+        muscleGroup:
+          type: string
+        exercises:
+          type: array
+          nullable: true
+          items:
+            $ref: "#/components/schemas/Exercise"
+
+    CategoryCreate:
+      type: object
+      required: [muscleGroup]
+      properties:
+        muscleGroup:
+          type: string
+
+    Exercise:
+      type: object
+      required: [name, description, categoryId]
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        categoryId:
+          type: integer
+        comments:
+          type: array
+          nullable: true
+          items:
+            $ref: "#/components/schemas/Comment"
+        userId:
+          type: integer
+
+    ExerciseCreate:
+      type: object
+      required: [name, description, categoryId, userId]
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        categoryId:
+          type: integer
+        userId:
+          type: integer
+
+    Comment:
+      type: object
+      required: [content, exerciseId]
+      properties:
+        id:
+          type: integer
+        content:
+          type: string
+        exerciseId:
+          type: integer
+        userId:
+          type: integer
+
+    CommentCreate:
+      type: object
+      required: [content, exerciseId, userId]
+      properties:
+        content:
+          type: string
+        exerciseId:
+          type: integer
+        userId:
+          type: integer
+
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        username:
+          type: string
+        email:
+          type: string
+        role:
+          type: string
+
+    RegisterRequest:
+      type: object
+      required: [username, email, password]
+      properties:
+        username: { type: string }
+        email: { type: string }
+        password: { type: string }
+
+    LoginRequest:
+      type: object
+      required: [email, password]
+      properties:
+        email: { type: string }
+        password: { type: string }
+
+    LoginResponse:
+      type: object
+      properties:
+        token:
+          type: string
+        id:
+          type: integer
+        username:
+          type: string
+        role:
+          type: string

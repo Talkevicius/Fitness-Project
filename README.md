@@ -118,3 +118,5 @@ The API includes comprehensive Swagger documentation available at /swagger when 
 * 404 - Not Found (resource doesn't exist)
 * 422 - Unprocessable Entity (empty request body)
 * 500 — Internal Server Error
+
+#### Live site: https://talkevicius.github.io/Fitness-Project/

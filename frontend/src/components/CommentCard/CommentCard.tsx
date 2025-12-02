@@ -1,6 +1,7 @@
 ﻿import React, { useState } from "react";
 import styles from './CommentCard.module.css';
-import png from "../../../dist/assets/user-B6VgKBmo.png";
+//import png1 from "../../../dist/assets/user-B6VgKBmo.png";
+import png from "../../assets/user.png"
 import ConfirmModal from "../ConfirmModal/ConfirmModal";
 import EditModal from "../EditModal/EditModal";
 import { isAdmin, getUser } from "../../context/auth";
@@ -31,7 +32,7 @@ const CommentCard: React.FC<CommentCardProps> = ({ id, username, content, userId
                 </div>
                 <div className={styles.contentContainer}>
                     <h5>{username}</h5>
-                    <p>{content}</p>
+                    <p className={styles.commentContent}>{content}</p>
                 </div>
                 {canEditOrDelete && (
                     <div className={styles.actions}>

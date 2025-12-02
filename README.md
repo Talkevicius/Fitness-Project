@@ -5,6 +5,7 @@ Fitness-Project:.
 ```bash
 Fitness-Project/
 ├───.README.md
+├───.frontend/ #react project
 └───backend/ #.NET API SERVER
     ├───Controllers/ #API ROUTE HANDLERS
     ├───Data/ #DATABASE 
@@ -17,6 +18,7 @@ Fitness-Project/
 * Categories Management: Create, read, update, and delete discussion categories
 * Exercises Management: Create and manage exercises within categories
 * Comments System: Add comments to exercises
+* User Authentication: Registration & login with JWT tokens
 * RESTful API: Full CRUD operations with proper HTTP status codes
 * API Documentation: Interactive Swagger documentation
 * Database Relations: Proper foreign key relationships between entities
@@ -31,7 +33,7 @@ Fitness-Project/
 - MySQL – Database
 - Swagger – API documentation
 
-### Frontend (planned)
+### Frontend (finished)
 - React – UI library
 - TypeScript – Typed JavaScript
 - Axios – HTTP client
@@ -68,6 +70,13 @@ dotnet ef database update
 dotnet run
 ```
 
+### Start frontend project
+
+```bash
+npm install #installs all dependencies and librariess
+npm run dev
+```
+
 ### Access the Application
 * API Server: http://localhost:5214
 * API Documentation: http://localhost:5214/swagger
@@ -97,6 +106,10 @@ dotnet run
 * PATCH /api/comments/:id - Update comment (partial)
 * DELETE /api/comments/:id - Delete comment
 
+### Users
+* POST /api/users/register - Create new user, return JWT token
+* POST /api/users/login - authenticate user, return JWT token
+
 ## API Documentation
 The API includes comprehensive Swagger documentation available at /swagger when the server is running.
 ## Error Handling
@@ -104,3 +117,4 @@ The API includes comprehensive Swagger documentation available at /swagger when 
 * 400 - Bad Request (validation errors)
 * 404 - Not Found (resource doesn't exist)
 * 422 - Unprocessable Entity (empty request body)
+* 500 — Internal Server Error

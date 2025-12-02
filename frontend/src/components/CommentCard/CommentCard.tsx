@@ -1,6 +1,7 @@
 ﻿import React, { useState } from "react";
 import styles from './CommentCard.module.css';
-import png from "../../../dist/assets/user-B6VgKBmo.png";
+//import png1 from "../../../dist/assets/user-B6VgKBmo.png";
+import png from "../../assets/user.png"
 import ConfirmModal from "../ConfirmModal/ConfirmModal";
 import EditModal from "../EditModal/EditModal";
 import { isAdmin, getUser } from "../../context/auth";

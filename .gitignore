@@ -25,7 +25,7 @@ backend/Views/**/obj/
 **/secrets.json
 
 # Environment files
-*.env
+#*.env
 appsettings.Development.json
 appsettings.Production.json
 

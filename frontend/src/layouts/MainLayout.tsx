@@ -68,7 +68,7 @@ const MainLayout = () => {
                 <Outlet />
             </main>
 
-            <footer className={styles.footer}>&copy; 2025 Fitness Project</footer>
+            <footer className={styles.footer}>&copy; 2025 Fitness Project - V1.1</footer>
         </div>
     );
 };
